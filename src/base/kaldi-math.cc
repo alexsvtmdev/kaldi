@@ -76,7 +76,7 @@ bool WithProb(BaseFloat prob, struct RandomState* state) {
   KALDI_COMPILE_TIME_ASSERT(RAND_MAX > 128 * 128);
   if (prob == 0) return false;
   else if (prob == 1.0) return true;
-  else if (prob * RAND_MAX < 128.0) {
+  else if (prob * static_cast<BaseFloat>(RAND_MAX) < 128.0) {
     // prob is very small but nonzero, and the "main algorithm"
     // wouldn't work that well.  So: with probability 1/128, we
     // return WithProb (prob * 128), else return false.
@@ -88,7 +88,7 @@ bool WithProb(BaseFloat prob, struct RandomState* state) {
       return false;
     }
   } else {
-    return (Rand(state) < ((RAND_MAX + static_cast<BaseFloat>(1.0)) * prob));
+    return (Rand(state) < ((static_cast<BaseFloat>(RAND_MAX) + 1.0f) * prob));
   }
 }
 
